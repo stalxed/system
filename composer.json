@@ -3,6 +3,7 @@
 	"description": "The library provides a number of system functions.",
 	"type": "library",
 	"homepage": "http://stalxed.ru",
+	"license": "MIT",
 	"authors": [
         {
             "name": "stalxed",
