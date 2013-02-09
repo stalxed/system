@@ -34,6 +34,7 @@ class Config
 
     /**
      * Prohibits calling the constructor outside the class.
+     * Implementing the Singleton Pattern
      */
     private function __construct()
     {
@@ -41,6 +42,7 @@ class Config
 
     /**
      * Prohibits the cloning procedure.
+     * Implementing the Singleton Pattern
      */
     private function __clone()
     {

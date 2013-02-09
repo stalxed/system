@@ -9,8 +9,8 @@ use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Stalxed\\System'     => $stRoot . '/library/',
-    'StalxedTest\\System' => $stRoot . '/tests/unit/'
+   'Stalxed\\System'     => $stRoot . '/library/',
+   'StalxedTest\\System' => $stRoot . '/tests/unit/'
 ));
 $loader->register();
 
