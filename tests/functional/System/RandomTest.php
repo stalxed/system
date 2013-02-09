@@ -1,40 +1,29 @@
 <?php
-error_reporting(E_ALL | E_STRICT);
+require_once dirname(__DIR__) . '/Bootstrap.php';
 
-$stRoot = realpath(dirname(dirname(__DIR__)));
+use Stalxed\System\Random;
 
-require_once $stRoot . '/vendor/autoload.php';
+$random = new Random();
 
-use Symfony\Component\ClassLoader\UniversalClassLoader;
+$actualNumber = $random->generateNumber(1, 10);
 
-$loader = new UniversalClassLoader();
-$loader->registerNamespaces(array(
-    'Stalxed\\System'     => $stRoot . '/library/',
-    'StalxedTest\\System' => $stRoot . '/tests/unit/'
-));
-$loader->register();
-
-$random = Random::getInstance();
-
-$actual_digit = $random->getDigit(1, 10);
-
-$actual_shuffle = array(1, 2, 3, 4, 5);
-$actual_shuffle = $random->shuffle($actual_shuffle);
+$actualArray = array(1, 2, 3, 4, 5);
+$actualArray = $random->shuffle($actualArray);
 ?>
 <html>
     <head>
-        <title>Функциональное тестирование класса System_Random.</title>
+        <title>Functional testing of a class Stalxed\System\Random.</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body>
-        <h1>Функциональное тестирование класса System_Random.</h1>
+        <h1>Functional testing of a class Stalxed\System\Random.</h1>
         
-        <h2>Функция getDigit:</h2>
-        <p><b>Ожидаемое значение:</b> случайное число от 1 до 10.</p>
-        <p><b>Реальное значение:</b> <?php echo $actual_digit; ?>.</p>
+        <h2>Function generateNumber:</h2>
+        <p><b>Expected value:</b> random number from 1 to 10.</p>
+        <p><b>Actual value:</b> <?php echo $actualNumber; ?>.</p>
         
-        <h2>Функция shuffle:</h2>
-        <p><b>Ожидаемое значение:</b> массив со значениями 1, 2, 3, 4, 5 в случайном порядке.</p>
-        <p><b>Реальное значение:</b> <?php echo implode(', ', $actual_shuffle); ?>.</p>
+        <h2>Function shuffle:</h2>
+        <p><b>Expected value:</b> array with the values 1, 2, 3, 4, 5 in random order.</p>
+        <p><b>Actual value:</b> <?php echo implode(', ', $actualArray); ?>.</p>
     </body>
 </html>

@@ -28,7 +28,7 @@ class RandomTest extends \PHPUnit_Framework_TestCase
 	    $this->setExpectedException('Stalxed\System\Exception\RangeException');
 	     
 	    $random = new Random();
-	    $random->generateNumber(10, 1);
+	    $random->generateNumber(3, 1);
 	}
     
     public function testGenerateUniqueNumber_CorrectRange()
@@ -40,8 +40,8 @@ class RandomTest extends \PHPUnit_Framework_TestCase
     	
 	    $random = new Random();
 	    
-        $this->assertSame(1, $random->generateUniqueNumber(1, 10));   
-        $this->assertSame(2, $random->generateUniqueNumber(1, 10));
+        $this->assertSame(1, $random->generateUniqueNumber(1, 3));   
+        $this->assertSame(2, $random->generateUniqueNumber(1, 3));
     }
     
     public function testGenerateUniqueNumber_MinNumberLessThanMax()
@@ -49,7 +49,7 @@ class RandomTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Stalxed\System\Exception\RangeException');
          
         $random = new Random();
-        $random->generateUniqueNumber(10, 1);
+        $random->generateUniqueNumber(3, 1);
     }
     
     public function testGenerateUniqueNumber_ExceedingLimitSelection()
@@ -72,7 +72,7 @@ class RandomTest extends \PHPUnit_Framework_TestCase
 	    
 	    $random = new Random();
              
-        $this->assertSame('abc', $random->generateWord(0, 3));
+        $this->assertSame('abc', $random->generateWord(1, 3));
     }
     
     public function testGenerateWord_MinNumberLessThanMax()
@@ -80,7 +80,7 @@ class RandomTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Stalxed\System\Exception\RangeException');
          
         $random = new Random();
-        $random->generateWord(10, 1);
+        $random->generateWord(3, 1);
     }
     
     public function testGenerateUniqueWord_CorrectRange()
@@ -96,8 +96,8 @@ class RandomTest extends \PHPUnit_Framework_TestCase
              
         $random = new Random();
         
-        $this->assertSame('abc', $random->generateUniqueWord(0, 10));     
-        $this->assertSame('XYZ', $random->generateUniqueWord(0, 10));
+        $this->assertSame('abc', $random->generateUniqueWord(1, 3));     
+        $this->assertSame('XYZ', $random->generateUniqueWord(1, 3));
     }
     
     public function testGenerateUniqueWord_MinNumberLessThanMax()
@@ -105,7 +105,7 @@ class RandomTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Stalxed\System\Exception\RangeException');
          
         $random = new Random();
-        $random->generateUniqueWord(10, 1);
+        $random->generateUniqueWord(3, 1);
     }
     
     public function testGenerateUniqueWord_ExceedingLimitSelection()
@@ -113,11 +113,11 @@ class RandomTest extends \PHPUnit_Framework_TestCase
     	$this->setExpectedException('Stalxed\System\Exception\LimitExceededException');
     	
 	    Random::setCallbackRandomFunction(function($minDigit, $maxDigit) {
-            return 5;
+            return 2;
         });
 
 	    $random = new Random();
-        $random->generateUniqueWord(0, 10);     
-        $random->generateUniqueWord(0, 10);
+        $random->generateUniqueWord(1, 3);     
+        $random->generateUniqueWord(1, 3);
     }   
 }
