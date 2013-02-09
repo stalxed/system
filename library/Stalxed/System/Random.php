@@ -12,7 +12,8 @@ class Random
      *
      * @var System_Random
      */
-    private static $instance;
+    private static $callbackRandomFunction;
+    
     /**
      * Список символов для генерации случайных слов.
      * 
@@ -31,57 +32,18 @@ class Random
      * @var array
      */
     private $history_words = array();
-    
-    /**
-     * Запрет вызова конструктора извне класса.
-     * 
-     */
-    protected function __construct()
+     
+    public static function setCallbackRandomFunction($callbackRandomFunction)
     {
+        self::$callbackRandomFunction = $callbackRandomFunction;
     }
     
-    /**
-     * Запрет вызова метода __clone извне класса.
-     * 
-     */
-    protected function __clone()
+    public static function resetCallbackRandomFunction()
     {
+        self::$callbackRandomFunction = null;
     }
-    
-    /**
-     * Возвращает экземпляр класса.
-     *
-     * @return System_Random
-     */
-    public static function getInstance()
-    {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
-        
-        return self::$instance;
-    }
-    
-    /**
-     * Устанавливает экземпляр класса.
-     * 
-     * @param System_Random $instance
-     */
-    public static function setInstance(Random $instance)
-    {
-        self::$instance = $instance;
-    }
-    
-    /**
-     * Уничтожает экземпляр класса.
-     * 
-     */
-    public static function unsetInstance()
-    {
-        self::$instance = null;
-    }
-    
-    /**
+
+	/**
      * Возвращает случайное число в указанном диапазоне.
      * 
      * @param integer $min_digit
@@ -90,6 +52,10 @@ class Random
      */
     public function getDigit($min_digit, $max_digit)
     {
+        if (is_callable(self::$callbackRandomFunction)) {
+            return call_user_func(self::$callbackRandomFunction, $min_digit, $max_digit);
+        }
+        
         return mt_rand($min_digit, $max_digit);
     }
     
