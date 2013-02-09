@@ -2,21 +2,20 @@
 namespace Stalxed\System;
 
 /**
- * Генерирует случайные значения.
+ * The class generates a different random data.
  *
  */
 class Random
 {
     /**
-     * Экземпляр класса.
+     * Callback functions generate a random number.
      *
-     * @var System_Random
+     * @var callback
      */
     private static $callbackRandomFunction = 'mt_rand';
-    
     /**
-     * Список символов для генерации случайных слов.
-     * 
+     * The list of characters to generate random words.
+     *
      * @var array
      */
     private $symbols = array(
@@ -25,29 +24,41 @@ class Random
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
     );
-    
-    private $historyNumbers = array();
-    
     /**
-     * Список сгенерированных слов.
-     * 
+     * The list of generated numbers.
+     *
+     * @var array
+     */
+    private $historyNumbers = array();
+    /**
+     * The list generated words.
+     *
      * @var array
      */
     private $historyWords = array();
 
+    /**
+     * Sets the default callback functions generate a random number.
+     *
+     */
     public static function setDefaultRandomFunction()
     {
         self::$callbackRandomFunction = 'mt_rand';
     }
-    
+
+    /**
+     * Sets the callback function of generating a random number.
+     *
+     * @param callback $callbackRandomFunction
+     */
     public static function setCallbackRandomFunction($callbackRandomFunction)
     {
         self::$callbackRandomFunction = $callbackRandomFunction;
     }
-    
-	/**
-     * Возвращает случайное число в указанном диапазоне.
-     * 
+
+    /**
+     * Generates and returns a random number in the specified range.
+     *
      * @param integer $minNumber
      * @param integer $maxNumber
      * @return integer
@@ -57,87 +68,85 @@ class Random
         if ($minNumber > $maxNumber) {
             throw new Exception\RangeException();
         }
-        
+
         return call_user_func(self::$callbackRandomFunction, $minNumber, $maxNumber);
     }
-    
+
     /**
-     * Возвращает уникальное случайное число.
-     * 
+     * Generates and returns a unique random number in the specified range.
+     *
      * @param integer $minNumber
      * @param integer $maxNumber
      * @return integer
-     * @throws Exception
+     * @throws Stalxed\System\Exception\LimitExceededException
      */
     public function generateUniqueNumber($minNumber, $maxNumber)
     {
         for ($i = 0; $i < 1000; $i++) {
             $number = $this->generateNumber($minNumber, $maxNumber);
-            
+
             if (array_search($number, $this->historyNumbers) === false) {
                 $this->historyNumbers[] = $number;
-                
+
                 return $number;
             }
         }
-        
+
         throw new Exception\LimitExceededException();
     }
-    
+
     /**
-     * Возвращает случайное слово с количеством букв
-     * в указанном диапазоне.
-     * 
-     * @param integer $min_symbols
-     * @param integer $max_symbols
+     * Generates and returns a combination of letters in the specified range.
+     *
+     * @param integer $minLetters
+     * @param integer $maxLetters
      * @return string
      */
-    public function generateWord($min_symbols, $max_symbols)
+    public function generateLetters($minLetters, $maxLetters)
     {
         $word = '';
-        $count_symbols = $this->generateNumber($min_symbols, $max_symbols);
+        $count_symbols = $this->generateNumber($minLetters, $maxLetters);
         for ($i = 0; $i < $count_symbols; $i++) {
             $index = $this->generateNumber(0, count($this->symbols) - 1);
             $word .= $this->symbols[$index];
         }
-        
+
         return $word;
     }
-    
+
     /**
-     * Возвращает уникальное случайное слово с количеством
-     * букв в указанном диапазоне.
-     * 
-     * @param integer $min_symbols
-     * @param integer $max_symbols
+     * Generates and returns a unique combination of letters in the specified range.
+     *
+     * @param integer $minLetters
+     * @param integer $maxLetters
      * @return string
-     * @throws Exception
+     * @throws Stalxed\System\Exception\LimitExceededException
      */
-    public function generateUniqueWord($min_symbols, $max_symbols)
+    public function generateUniqueLetters($minLetters, $maxLetters)
     {
         for ($i = 0; $i < 1000; $i++) {
-            $word = $this->generateWord($min_symbols, $max_symbols);
-            
+            $word = $this->generateLetters($minLetters, $maxLetters);
+
             if (array_search($word, $this->historyWords) === false) {
                 $this->historyWords[] = $word;
-                
+
                 return $word;
             }
         }
-        
+
         throw new Exception\LimitExceededException();
     }
-    
+
     /**
-     * Возвращает массив в перемешанном порядке.
-     * 
+     * Shuffle an array.
+     *
      * @param array $array
      * @return array
      */
     public function shuffle(array $array)
     {
         shuffle($array);
-        
+
         return $array;
     }
 }

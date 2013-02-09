@@ -8,82 +8,82 @@ class RandomTest extends \PHPUnit_Framework_TestCase
 	protected function tearDown()
 	{
 		Random::setDefaultRandomFunction();
-		
+
 		parent::tearDown();
 	}
-	
+
 	public function testGenerateNumber_CorrectRange()
 	{
 	    Random::setCallbackRandomFunction(function($minDigit, $maxDigit) {
             return 2;
         });
-	    
+
 	    $random = new Random();
-	    
+
 	    $this->assertEquals(2, $random->generateNumber(1, 3));
 	}
-	
+
 	public function testGenerateNumber_MinNumberLessThanMax()
 	{
 	    $this->setExpectedException('Stalxed\System\Exception\RangeException');
-	     
+
 	    $random = new Random();
 	    $random->generateNumber(3, 1);
 	}
-    
+
     public function testGenerateUniqueNumber_CorrectRange()
     {
         $list = array(1, 1, 1, 2);
 	    Random::setCallbackRandomFunction(function($minDigit, $maxDigit) use(&$list) {
             return array_shift($list);
         });
-    	
+
 	    $random = new Random();
-	    
-        $this->assertSame(1, $random->generateUniqueNumber(1, 3));   
+
+        $this->assertSame(1, $random->generateUniqueNumber(1, 3));
         $this->assertSame(2, $random->generateUniqueNumber(1, 3));
     }
-    
+
     public function testGenerateUniqueNumber_MinNumberLessThanMax()
     {
         $this->setExpectedException('Stalxed\System\Exception\RangeException');
-         
+
         $random = new Random();
         $random->generateUniqueNumber(3, 1);
     }
-    
+
     public function testGenerateUniqueNumber_ExceedingLimitSelection()
     {
     	$this->setExpectedException('Stalxed\System\Exception\LimitExceededException');
-    	
+
 	    $random = new Random();
 	    $random->generateUniqueNumber(1, 3);
 	    $random->generateUniqueNumber(1, 3);
 	    $random->generateUniqueNumber(1, 3);
 	    $random->generateUniqueNumber(1, 3);
-    }  
-    
-    public function testGenerateWord_CorrectRange()
+    }
+
+    public function testGenerateLetters_CorrectRange()
     {
         $list = array(3, 0, 1, 2);
 	    Random::setCallbackRandomFunction(function($minDigit, $maxDigit) use(&$list) {
             return array_shift($list);
         });
-	    
+
 	    $random = new Random();
-             
-        $this->assertSame('abc', $random->generateWord(1, 3));
+
+        $this->assertSame('abc', $random->generateLetters(1, 3));
     }
-    
-    public function testGenerateWord_MinNumberLessThanMax()
+
+    public function testGenerateLetters_MinNumberLessThanMax()
     {
         $this->setExpectedException('Stalxed\System\Exception\RangeException');
-         
+
         $random = new Random();
-        $random->generateWord(3, 1);
+        $random->generateLetters(3, 1);
     }
-    
-    public function testGenerateUniqueWord_CorrectRange()
+
+    public function testGenerateUniqueLetters_CorrectRange()
     {
         $list = array(
             3, 0, 1, 2,   //3 symbols: abc.
@@ -93,31 +93,31 @@ class RandomTest extends \PHPUnit_Framework_TestCase
         Random::setCallbackRandomFunction(function($minDigit, $maxDigit) use(&$list) {
             return array_shift($list);
         });
-             
+
         $random = new Random();
-        
-        $this->assertSame('abc', $random->generateUniqueWord(1, 3));     
-        $this->assertSame('XYZ', $random->generateUniqueWord(1, 3));
+
+        $this->assertSame('abc', $random->generateUniqueLetters(1, 3));
+        $this->assertSame('XYZ', $random->generateUniqueLetters(1, 3));
     }
-    
-    public function testGenerateUniqueWord_MinNumberLessThanMax()
+
+    public function testGenerateUniqueLetters_MinNumberLessThanMax()
     {
         $this->setExpectedException('Stalxed\System\Exception\RangeException');
-         
+
         $random = new Random();
-        $random->generateUniqueWord(3, 1);
+        $random->generateUniqueLetters(3, 1);
     }
-    
-    public function testGenerateUniqueWord_ExceedingLimitSelection()
+
+    public function testGenerateUniqueLetters_ExceedingLimitSelection()
     {
     	$this->setExpectedException('Stalxed\System\Exception\LimitExceededException');
-    	
+
 	    Random::setCallbackRandomFunction(function($minDigit, $maxDigit) {
             return 2;
         });
 
 	    $random = new Random();
-        $random->generateUniqueWord(1, 3);     
-        $random->generateUniqueWord(1, 3);
-    }   
+        $random->generateUniqueLetters(1, 3);
+        $random->generateUniqueLetters(1, 3);
+    }
 }

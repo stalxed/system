@@ -2,56 +2,54 @@
 namespace Stalxed\System;
 
 /**
- * Содержит конфигурационные данные.
+ * The class contains the configuration data.
  *
  */
 class Config
 {
     /**
-     * Экземпляр класса.
+     * An instance of the class.
      *
      * @var \Stalxed\System\Config
      */
     private static $instance;
     /**
-     * Опции конфигурации.
+     * Configuration options.
      *
      * @var array
      */
     private $options = array();
     /**
-     * Префикс пути.
+     * The prefix of path.
      *
      * @var string
      */
     private $prefixPath;
     /**
-     * Пути к элементам.
+     * Paths.
      *
      * @var array
      */
     private $paths = array();
 
     /**
-     * Запрет вызова конструктора извне класса.
-     *
+     * Prohibits calling the constructor outside the class.
      */
     private function __construct()
     {
     }
 
     /**
-     * Запрет вызова метода __clone извне класса.
-     *
+     * Prohibits the cloning procedure.
      */
     private function __clone()
     {
     }
 
     /**
-     * Возвращает экземпляр класса.
+     * Returns an instance of the class.
      *
-     * @return System_Config
+     * @return \Stalxed\System\Config
      */
     public static function getInstance()
     {
@@ -63,9 +61,9 @@ class Config
     }
 
     /**
-     * Устанавливает экземпляр класса.
+     * Sets the instance of the class.
      *
-     * @param System_Config $instance
+     * @param \Stalxed\System\Config $instance
      */
     public static function setInstance(Config $instance)
     {
@@ -73,8 +71,7 @@ class Config
     }
 
     /**
-     * Уничтожает экземпляр класса.
-     *
+     * Destroys the instance of the class.
      */
     public static function unsetInstance()
     {
@@ -82,8 +79,8 @@ class Config
     }
 
     /**
-     * Устанавливает опцию конфигурации.
-     * 
+     * Sets a configuration option.
+     *
      * @param string $name
      * @param string $value
      */
@@ -93,7 +90,7 @@ class Config
     }
 
     /**
-     * Устанавливает префикс пути.
+     * Sets the prefix path.
      *
      * @param string $prefixPath
      */
@@ -103,7 +100,7 @@ class Config
     }
 
     /**
-     * Устанавливает путь к элементу.
+     * Sets the path.
      *
      * @param string $name
      * @param string $value
@@ -114,8 +111,7 @@ class Config
     }
 
     /**
-     * Очищает конфигурационные данные.
-     *
+     * Cleans up the configuration data.
      */
     public function clear()
     {
@@ -125,10 +121,9 @@ class Config
     }
 
     /**
-     * Возвращает опцию конфигурации.
+     * Returns a configuration option.
      *
      * @param string $name
-     * 
      * @return string
      */
     public function get($name)
@@ -137,16 +132,15 @@ class Config
     }
 
     /**
-     * Возвращает путь к элементу.
-     * Подставляется префикс пути, если он установлен.
+     * Returns the path.
+     * Adds the prefix path, if it is set.
      *
      * @param string $name
-     * 
      * @return string
      */
     public function getPath($name)
     {
-        if (!isset($this->paths[$name])) {
+        if (! isset($this->paths[$name])) {
             return null;
         }
 
