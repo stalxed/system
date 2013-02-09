@@ -7,12 +7,12 @@ class RandomTest extends \PHPUnit_Framework_TestCase
 {
 	protected function tearDown()
 	{
-		Random::resetCallbackRandomFunction();
+		Random::setDefaultRandomFunction();
 		
 		parent::tearDown();
 	}
 	
-	public function testGetDigit()
+	public function testGetNumber()
 	{
 	    Random::setCallbackRandomFunction(function($minDigit, $maxDigit) {
             return $minDigit + $maxDigit;
@@ -20,22 +20,23 @@ class RandomTest extends \PHPUnit_Framework_TestCase
 	    
 	    $random = new Random();
 	    
-	    $this->assertEquals(3, $random->getDigit(1, 2));
+	    $this->assertEquals(3, $random->getNumber(1, 2));
 	}
     
-    public function testGetDigitWithExceptions()
+    public function getUniqueNumber()
     {
-        $list = array(0, 1, 2, 3, 4, 5);
+        $list = array(1, 1, 1, 2);
 	    Random::setCallbackRandomFunction(function($minDigit, $maxDigit) use(&$list) {
             return array_shift($list);
         });
     	
 	    $random = new Random();
 	    
-        $this->assertSame(5, $random->getDigitWithExceptions(0, 10, array(0, 1, 2, 3, 4)));     
+        $this->assertSame(1, $random->getUniqueNumber(1, 10));   
+        $this->assertSame(2, $random->getUniqueNumber(1, 10));
     }
     
-    public function testGetDigitWithExceptions_MaxNumberAttemptsExceeded()
+    public function getUniqueNumber_MaxNumberAttemptsExceeded()
     {
     	$this->setExpectedException(
     	    'Stalxed\System\Exception\RuntimeException',
@@ -47,8 +48,8 @@ class RandomTest extends \PHPUnit_Framework_TestCase
         });
 	    
 	    $random = new Random();
-
-        $random->getDigitWithExceptions(0, 10, array(5));     
+	    $random->getUniqueNumber(1, 10);
+	    $random->getUniqueNumber(1, 10);
     }  
     
     public function testGetWord()

@@ -12,7 +12,7 @@ class Random
      *
      * @var System_Random
      */
-    private static $callbackRandomFunction;
+    private static $callbackRandomFunction = 'mt_rand';
     
     /**
      * Список символов для генерации случайных слов.
@@ -26,60 +26,55 @@ class Random
         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
     );
     
+    private $historyNumbers = array();
+    
     /**
      * Список сгенерированных слов.
      * 
      * @var array
      */
-    private $history_words = array();
-     
+    private $historyWords = array();
+
+    public static function setDefaultRandomFunction()
+    {
+        self::$callbackRandomFunction = 'mt_rand';
+    }
+    
     public static function setCallbackRandomFunction($callbackRandomFunction)
     {
         self::$callbackRandomFunction = $callbackRandomFunction;
     }
     
-    public static function resetCallbackRandomFunction()
-    {
-        self::$callbackRandomFunction = null;
-    }
-
 	/**
      * Возвращает случайное число в указанном диапазоне.
      * 
-     * @param integer $min_digit
-     * @param integer $max_digit
+     * @param integer $minNumber
+     * @param integer $maxNumber
      * @return integer
      */
-    public function getDigit($min_digit, $max_digit)
+    public function getNumber($minNumber, $maxNumber)
     {
-        if (is_callable(self::$callbackRandomFunction)) {
-            return call_user_func(self::$callbackRandomFunction, $min_digit, $max_digit);
-        }
-        
-        return mt_rand($min_digit, $max_digit);
+        return call_user_func(self::$callbackRandomFunction, $minNumber, $maxNumber);
     }
     
     /**
-     * Возвращает случайное число в указанном диапазоне.
-     * Числа, указанные в списке исключений не могут быть
-     * возвращены.
+     * Возвращает уникальное случайное число.
      * 
-     * @param integer $min_digit
-     * @param integer $max_digit
-     * @param array $exceptions
+     * @param integer $minNumber
+     * @param integer $maxNumber
      * @return integer
      * @throws Exception
      */
-    public function getDigitWithExceptions($min_digit, $max_digit, array $exceptions = array())
+    public function getUniqueNumber($minNumber, $maxNumber)
     {
-        $max_count_attempts_select = $max_digit - $min_digit + 1;
-        for ($i = 0; $i < $max_count_attempts_select; $i++) {
-            $digit = $this->getDigit($min_digit, $max_digit);
-            if (array_search($digit, $exceptions) !== false) {
-                continue;
-            }
+        for ($i = 0; $i < 1000; $i++) {
+            $number = $this->getNumber($minNumber, $maxNumber);
             
-            return $digit;
+            if (array_search($number, $this->historyNumbers) === false) {
+                $this->historyNumbers[] = $number;
+                
+                return $number;
+            }
         }
         
         throw new Exception\RuntimeException('Exceeded maximum count of attempts select.');
@@ -96,9 +91,9 @@ class Random
     public function getWord($min_symbols, $max_symbols)
     {
         $word = '';
-        $count_symbols = $this->getDigit($min_symbols, $max_symbols);
+        $count_symbols = $this->getNumber($min_symbols, $max_symbols);
         for ($i = 0; $i < $count_symbols; $i++) {
-            $index = $this->getDigit(0, count($this->symbols) - 1);
+            $index = $this->getNumber(0, count($this->symbols) - 1);
             $word .= $this->symbols[$index];
         }
         
@@ -119,8 +114,8 @@ class Random
         for ($i = 0; $i < 1000; $i++) {
             $word = $this->getWord($min_symbols, $max_symbols);
             
-            if (array_search($word, $this->history_words) === false) {
-                $this->history_words[] = $word;
+            if (array_search($word, $this->historyWords) === false) {
+                $this->historyWords[] = $word;
                 
                 return $word;
             }
