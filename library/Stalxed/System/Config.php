@@ -67,7 +67,7 @@ class Config
      *
      * @param System_Config $instance
      */
-    public static function setInstance(System_Config $instance)
+    public static function setInstance(Config $instance)
     {
         self::$instance = $instance;
     }

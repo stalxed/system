@@ -52,8 +52,12 @@ class Random
      * @param integer $maxNumber
      * @return integer
      */
-    public function getNumber($minNumber, $maxNumber)
+    public function generateNumber($minNumber, $maxNumber)
     {
+        if ($minNumber > $maxNumber) {
+            throw new Exception\RangeException();
+        }
+        
         return call_user_func(self::$callbackRandomFunction, $minNumber, $maxNumber);
     }
     
@@ -65,10 +69,10 @@ class Random
      * @return integer
      * @throws Exception
      */
-    public function getUniqueNumber($minNumber, $maxNumber)
+    public function generateUniqueNumber($minNumber, $maxNumber)
     {
         for ($i = 0; $i < 1000; $i++) {
-            $number = $this->getNumber($minNumber, $maxNumber);
+            $number = $this->generateNumber($minNumber, $maxNumber);
             
             if (array_search($number, $this->historyNumbers) === false) {
                 $this->historyNumbers[] = $number;
@@ -77,7 +81,7 @@ class Random
             }
         }
         
-        throw new Exception\RuntimeException('Exceeded maximum count of attempts select.');
+        throw new Exception\LimitExceededException();
     }
     
     /**
@@ -88,12 +92,12 @@ class Random
      * @param integer $max_symbols
      * @return string
      */
-    public function getWord($min_symbols, $max_symbols)
+    public function generateWord($min_symbols, $max_symbols)
     {
         $word = '';
-        $count_symbols = $this->getNumber($min_symbols, $max_symbols);
+        $count_symbols = $this->generateNumber($min_symbols, $max_symbols);
         for ($i = 0; $i < $count_symbols; $i++) {
-            $index = $this->getNumber(0, count($this->symbols) - 1);
+            $index = $this->generateNumber(0, count($this->symbols) - 1);
             $word .= $this->symbols[$index];
         }
         
@@ -109,10 +113,10 @@ class Random
      * @return string
      * @throws Exception
      */
-    public function getUniqueWord($min_symbols, $max_symbols)
+    public function generateUniqueWord($min_symbols, $max_symbols)
     {
         for ($i = 0; $i < 1000; $i++) {
-            $word = $this->getWord($min_symbols, $max_symbols);
+            $word = $this->generateWord($min_symbols, $max_symbols);
             
             if (array_search($word, $this->historyWords) === false) {
                 $this->historyWords[] = $word;
@@ -121,7 +125,7 @@ class Random
             }
         }
         
-        throw new Exception\RuntimeException('Exceeded maximum count of attempts select.');
+        throw new Exception\LimitExceededException();
     }
     
     /**
