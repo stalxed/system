@@ -8,34 +8,22 @@ namespace Stalxed\System;
 class Random
 {
     /**
-     * Callback functions generate a random number.
+     * Callback functions generate a random digit.
      *
      * @var callback
      */
     private static $callbackRandomFunction = 'mt_rand';
     /**
-     * The list of characters to generate random words.
+     * The list of letters to generate a random letter.
      *
      * @var array
      */
-    private $symbols = array(
+    private $letters = array(
         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
         'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
     );
-    /**
-     * The list of generated numbers.
-     *
-     * @var array
-     */
-    private $historyNumbers = array();
-    /**
-     * The list generated words.
-     *
-     * @var array
-     */
-    private $historyWords = array();
 
     /**
      * Sets the default callback functions generate a random number.
@@ -57,84 +45,31 @@ class Random
     }
 
     /**
-     * Generates and returns a random number in the specified range.
+     * Generates and returns a random digit in the specified range.
      *
-     * @param integer $minNumber
-     * @param integer $maxNumber
+     * @param integer $minDigit
+     * @param integer $maxDigit
      * @return integer
      */
-    public function generateNumber($minNumber, $maxNumber)
+    public function generateDigit($minDigit, $maxDigit)
     {
-        if ($minNumber > $maxNumber) {
+        if ($minDigit > $maxDigit) {
             throw new Exception\RangeException();
         }
 
-        return call_user_func(self::$callbackRandomFunction, $minNumber, $maxNumber);
+        return call_user_func(self::$callbackRandomFunction, $minDigit, $maxDigit);
     }
 
     /**
-     * Generates and returns a unique random number in the specified range.
+     * Generates and returns a random letter.
      *
-     * @param integer $minNumber
-     * @param integer $maxNumber
-     * @return integer
-     * @throws Stalxed\System\Exception\LimitExceededException
-     */
-    public function generateUniqueNumber($minNumber, $maxNumber)
-    {
-        for ($i = 0; $i < 1000; $i++) {
-            $number = $this->generateNumber($minNumber, $maxNumber);
-
-            if (array_search($number, $this->historyNumbers) === false) {
-                $this->historyNumbers[] = $number;
-
-                return $number;
-            }
-        }
-
-        throw new Exception\LimitExceededException();
-    }
-
-    /**
-     * Generates and returns a combination of letters in the specified range.
-     *
-     * @param integer $minLetters
-     * @param integer $maxLetters
      * @return string
      */
-    public function generateLetters($minLetters, $maxLetters)
+    public function generateLetter()
     {
-        $word = '';
-        $count_symbols = $this->generateNumber($minLetters, $maxLetters);
-        for ($i = 0; $i < $count_symbols; $i++) {
-            $index = $this->generateNumber(0, count($this->symbols) - 1);
-            $word .= $this->symbols[$index];
-        }
+        $index = $this->generateDigit(0, count($this->letters) - 1);
 
-        return $word;
-    }
-
-    /**
-     * Generates and returns a unique combination of letters in the specified range.
-     *
-     * @param integer $minLetters
-     * @param integer $maxLetters
-     * @return string
-     * @throws Stalxed\System\Exception\LimitExceededException
-     */
-    public function generateUniqueLetters($minLetters, $maxLetters)
-    {
-        for ($i = 0; $i < 1000; $i++) {
-            $word = $this->generateLetters($minLetters, $maxLetters);
-
-            if (array_search($word, $this->historyWords) === false) {
-                $this->historyWords[] = $word;
-
-                return $word;
-            }
-        }
-
-        throw new Exception\LimitExceededException();
+        return $this->letters[$index];
     }
 
     /**
